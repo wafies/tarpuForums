@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Post;
+use App\Models\Report;
+use Illuminate\Support\Facades\Gate;
+
+class ReportController extends Controller
+{
+    public function report(Post $post, Request $request)
+    {
+        $report = $post->reports()->where('user_id', auth()->id())->first();
+
+        $validatedData = $request->validate([
+            'reason' => 'required|string|max:255',
+        ]);
+        if (!$report) {
+            $post->reports()->create(['user_id' => auth()->id(), 'reason' => $validatedData['reason']]);
+        }
+
+        return back();
+    }
+    public function destroy(Report $report){
+        Gate::authorize('delete', $report);
+        $report->delete();
+        return redirect(route('admin.dashboard'));
+    }
+}
