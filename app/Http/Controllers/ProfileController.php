@@ -20,7 +20,7 @@ class ProfileController extends Controller
 
         $users = $query
             ->latest()
-            ->paginate(12);
+            ->paginate(6);
 
         return view('profile.index', [
             'users' => $users,
@@ -39,7 +39,8 @@ class ProfileController extends Controller
         $user = Auth::user();
         $query = PostLike::query();
         $query->where('user_id', $user->id);
-        $likedPosts = $query->with('post')->get()->pluck('post');
+        
+        $likedPosts = $query->get()->pluck('post'); //pluck returns the post array without the postlike stuff
 
         return view('profile.profile', [
             'user' => $user,

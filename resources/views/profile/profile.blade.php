@@ -26,9 +26,9 @@
                     <p class="user-description-specific">Apraksts: {{$user->description}}</p>
                     <p>Reģistrējies: {{$user->created_at->format('d.m.Y H:i')}}</p>
                     @if($user->posts->isEmpty())
-                        <p>Publikācijas: 0</p>
+                        <h2>Publikācijas: 0</h2>
                     @else
-                        <p>Publikācijas: {{$user->posts->count()}}</p>
+                        <h2>Publikācijas: {{$user->posts->count()}}</h2>
                         @foreach($user->posts as $post)
                             <a href="{{route('comments.index', $post)}}" class="user-post-link">{{$post->title}}</a>
                         @endforeach

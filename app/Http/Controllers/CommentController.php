@@ -14,7 +14,7 @@ class CommentController extends Controller
         $comments = $post->comments()
             ->with('user')
             ->latest()
-            ->paginate(4);
+            ->paginate(6);
 
         return view('comments.index', [
             'post' => $post,

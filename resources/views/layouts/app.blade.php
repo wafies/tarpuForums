@@ -7,6 +7,7 @@
     <title>@yield('title', 'Kibertārps')</title>
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <!-- idek why it wont work if i put it in the css file -->
     <style>
         .hiddenSidebar {
             transition: all 0.3s ease;
@@ -164,12 +165,12 @@
             @endif
                 <div class="ad-container" id="adContainer">
         <div class="ad-track">
-        <div class="ad-group">
-            <img src="{{ asset('images/ad.png') }}" alt="Advertisement" class="ad-image">
-            <h2 class="ad-text">Jūsu reklāma šeit!</h2>
-            <img src="{{ asset('images/ad.png') }}" alt="Advertisement" class="ad-image">
+            <div class="ad-group">
+                <img src="{{ asset('images/ad.png') }}" alt="Advertisement" class="ad-image">
+                <h2 class="ad-text">Jūsu reklāma šeit!</h2>
+                <img src="{{ asset('images/ad.png') }}" alt="Advertisement" class="ad-image">
+            </div>
         </div>
-    </div>
     </div>
             @yield('content')
         </div>

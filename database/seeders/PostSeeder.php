@@ -89,7 +89,7 @@ Un vēl viens interesants fakts: ja pietiekami ilgi mūs berzē, mēs varam kļ�
 
 Tārps burtiski ir radīts cilvēka pirkstiem. Nežēlīga elastība, milzīgs izturības rezervju daudzums un gļotu bruņas nozīmē, ka tas var izturēt berzēšanu visu dienu, jebkādos izmēros un formās, un joprojām prasīt vēl!',
             'category' => 'Zinātniski',
-            'image_path' => 'posts/xxx.png',
+            'image_path' => 'posts/hmm.png',
         ]);
         Post::create([
             'user_id' => User::inRandomOrder()->first()?->id,
@@ -120,7 +120,7 @@ Galu galā mēs, tārpi, esam miermīlīgas radības. 🪱. Girls for the win!!!
             'title' => 'Kas notiek ar tiem tārpiem, kuri aiztiek mazos tārpiņus?',
             'content' => 'Trakas lietas veči. Es labāk tad turpināšu zvejot, nekā riskēt ar savu dzīvību. Esmu dzirdējis, ka tie tārpi, kuri aiztiek mazos tārpiņus, tiek sodīti ar nāvi. Tas ir ļoti bīstami. Esiet uzmanīgi, kad zvejojat.',
             'category' => 'Zveja',
-            'image_path' => 'posts/abuse.png',
+            'image_path' => 'posts/little.png',
         ]);
     }
 }

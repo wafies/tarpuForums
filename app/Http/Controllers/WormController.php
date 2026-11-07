@@ -15,8 +15,9 @@ class WormController extends Controller
 
     public function index(Request $request)
     {
+        //most common worm types
         $wormSpeciesOptions = [
-            'all' => 'All species',
+            'all' => 'Visas sugas',
             42 => 'Annelida',
             5967481 => 'Nematoda',
             108 => 'Platyhelminthes'
@@ -66,9 +67,10 @@ class WormController extends Controller
                 break;
             }
         }
-
+        $phylumKeys = [];
         if ($phylumKey === null || $phylumKey === 'all') {
-            $parameters['phylumKey'] = 42;
+            //this is probably not how you should do it but whatever
+            $phylumKeys = [42, 108, 5967481];
         } else {
             $parameters['phylumKey'] = $phylumKey;
         }
@@ -92,23 +94,61 @@ class WormController extends Controller
         $cacheKey = 'gbif.api'.hash('sha256', json_encode($parameters));
 
         try {
-            $worms = Cache::remember($cacheKey, now()->addHours(1), function () use ($parameters) {
-                $response = Http::acceptJson()->timeout(10)->get(self::API_URL.'v1/occurrence/search', $parameters);
+            $worms = Cache::remember($cacheKey, now()->addHours(1), function () use ($parameters, $phylumKeys) {
+                //idek if ill do anything with this but it is scalable
+                if(count($phylumKeys) != 0){
+                    $allData = [];
+                    //limit stuff so it doesnt do the big limit multiple times
+                    //divides it for each specie 
+                    $temp = $parameters['limit']/count($phylumKeys);
+                    $eachLimit = (int) $temp;
+                    $remainder = $parameters['limit']%count($phylumKeys);
+                    foreach($phylumKeys as $phylumKey){
+                        $parameters['phylumKey'] = $phylumKey;
+                        if($phylumKeys[count($phylumKeys)-1] == $phylumKey){
+                            $parameters['limit'] = $eachLimit + $remainder;
+                        }else{
+                            $parameters['limit'] = $eachLimit;
+                        }
+                        $response = Http::acceptJson()->timeout(10)->get(self::API_URL.'v1/occurrence/search', $parameters);
 
-                if (! $response->successful()) {
-                    throw new RuntimeException(
-                        'GBIF returned an unsuccessful response.'
-                    );
+                        if (! $response->successful()) {
+                            throw new RuntimeException(
+                                'GBIF returned an unsuccessful response.'
+                            );
+                        }
+
+                        $data = $response->json();
+
+                        if (! is_array($data) || ! isset($data['results'])) {
+                            throw new RuntimeException(
+                                'GBIF returned an unexpected response format.'
+                            );
+                        }
+                        //combines all the species
+                        $allData = array_merge($data['results'], $allData);
+                    }
+                    //shuffle because you probably dont want them in an order repeating
+                    shuffle($allData);
+                    return $allData;
+                }else{
+                    $response = Http::acceptJson()->timeout(10)->get(self::API_URL.'v1/occurrence/search', $parameters);
+
+                    if (! $response->successful()) {
+                        throw new RuntimeException(
+                            'GBIF returned an unsuccessful response.'
+                        );
+                    }
+
+                    $data = $response->json();
+
+                    if (! is_array($data) || ! isset($data['results'])) {
+                        throw new RuntimeException(
+                            'GBIF returned an unexpected response format.'
+                        );
+                    }
+                    return $data['results'];
                 }
-
-                $data = $response->json();
-
-                if (! is_array($data) || ! isset($data['results'])) {
-                    throw new RuntimeException(
-                        'GBIF returned an unexpected response format.'
-                    );
-                }
-                return $data['results'];
             });
         } catch (ConnectionException) {
             $errorMessage = 'The worm catalogue is temporarily unavailable. Please try again later.';

@@ -9,6 +9,6 @@ class ReportPolicy
 {
     public function delete(User $user, Report $report): bool
     {
-        return $user->isAdmin();
+        return $user->isAdmin(); //just admins
     }
 }

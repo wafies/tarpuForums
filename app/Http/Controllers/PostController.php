@@ -28,6 +28,7 @@ class PostController extends Controller
                     $query->orderBy('created_at', 'asc');
                     break;
                 case 'most_commented':
+                    // withCount adds a comments_count attribute to each post, which we can then order by.
                     $query->withCount('comments')->orderBy('comments_count', 'desc');
                     break;
                 case 'least_commented':
@@ -44,16 +45,17 @@ class PostController extends Controller
 
         $posts = $query
             ->latest()
-            ->paginate(4)
+            ->paginate(6)
             ->withQueryString();
 
         return view('posts.index', [
             'posts' => $posts,
         ]);
     }
-
+    //this probably should be its own controller but im lazy
     public function toggleLike(Post $post)
     {
+        //checks if user has already liked this post
         $like = $post->likes()->where('user_id', auth()->id())->first();
 
         if ($like) {

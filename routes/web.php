@@ -68,7 +68,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/reports/{report}', [ReportController::class, 'destroy'])->name('reports.destroy');
 
     Route::resource('posts.comments', CommentController::class)
-        ->shallow()
+        ->shallow() //shallow automatically makes the /post/{id}/comments, /comments/{id}/edit and the other ones
         ->except(['index', 'show'])
         ->names('comments');
 

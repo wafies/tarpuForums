@@ -98,18 +98,18 @@
                             </button>
                         @endauth
                         @auth
-                        @if(!$post->reports()->where('user_id', auth()->id())->exists())
-                        <form action="{{ route('posts.report', $post) }}" method="POST" id="{{ $post->id }}-reportForm">
-                            @csrf
-                            <button onclick="showForm({{ $post->id }})" type="submit" class="button report" id="{{ ($post->reports()->where('user_id', auth()->id())->exists()) ? 'reported' : ''}}">
-                                🚩
-                            </button>
-                        </form>
-                        @else
-                            <button disabled type="submit" class="disabled button report" id="reported">
-                                🚩
-                            </button>
-                        @endif
+                            @if(!$post->reports()->where('user_id', auth()->id())->exists())
+                            <form action="{{ route('posts.report', $post) }}" method="POST" id="{{ $post->id }}-reportForm">
+                                @csrf
+                                <button onclick="showForm({{ $post->id }})" type="submit" class="button report" id="{{ ($post->reports()->where('user_id', auth()->id())->exists()) ? 'reported' : ''}}">
+                                    🚩
+                                </button>
+                            </form>
+                            @else
+                                <button disabled type="submit" class="disabled button report" id="reported">
+                                    🚩
+                                </button>
+                            @endif
                         @else
                             <button disabled type="submit" class="disabled button report">
                                 🚩

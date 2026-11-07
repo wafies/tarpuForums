@@ -13,9 +13,9 @@
         <a href="{{route("profile.index")}}" class="button">Clear</a>
     </form>
     @if ($users->isEmpty())
-    <div class="empty-users">
-        <p class="empty-message">Nav lietotāju??? :(</p>
-    </div>
+        <div class="empty-users">
+            <p class="empty-message">Nav lietotāju??? :(</p>
+        </div>
     @else
         <div class="user-grid">
             @foreach ($users as $user)
@@ -46,7 +46,7 @@
                 </div>
             @endforeach
         </div>
-
+        <!-- laravel built in pagination was fucked up for some reason idek -->
         <div class="pagination">
             @if($users->hasPages())
             <button class="pagination-button" id="prevPage" {{ $users->onFirstPage() ? 'disabled' : '' }}>

@@ -10,10 +10,10 @@
         <form action="{{ route('worms.index') }}" method="GET">
             <div class="filter-field">
                 <label for="species">Suga</label>
-
+                <!-- values from wormcontroller -->
                 <select name="species" id="species">
                     @foreach ($wormSpeciesOptions as $value => $label)  
-                        <option value="{{ $value }}" @selected($species === $value)>
+                        <option value="{{ $value }}" @if($species == $value) selected @endif>
                             {{ $label }}
                         </option>
                     @endforeach
@@ -22,7 +22,7 @@
 
                 <select name="continent" id="continent">
                     @foreach ($continentOptions as $value => $label)  
-                        <option value="{{ $value }}" @selected($continent === $value)>
+                        <option value="{{ $value }}" @if($continent == $value) selected @endif>
                             {{ $label }}
                         </option>
                     @endforeach
@@ -31,7 +31,7 @@
 
                 <select name="country" id="country">
                     @foreach ($countryOptions as $value => $label)  
-                        <option value="{{ $value }}" @selected($country === $value)>
+                        <option value="{{ $value }}" @if($country == $value) selected @endif>
                             {{ $label }}
                         </option>
                     @endforeach
@@ -73,7 +73,7 @@
                         <div class="worm-card-content">
                             <h2>Nosaukums: {{ $worm['genericName'] ?? 'Untitled Worm' }}</h2>
 
-                            <p class="worm-tag">Zinātniskais nosaukums: {{ $worm['scientificName']}}</p>
+                            <p class="worm-tag">Zinātniskais nosaukums: {{ $worm['scientificName'] ?? 'Unknown'}}</p>
                             <p class="worm-tag">Suga: {{ $worm['species'] ?? 'Unknown' }}</p>
                             <p class="worm-tag">Tips: {{ $worm['phylum'] ?? 'Unknown' }}</p>
                             <p class="worm-tag">Kontinents: {{ $worm['continent'] ?? 'Unknown' }}</p>

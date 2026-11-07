@@ -11,6 +11,7 @@ class ReportController extends Controller
 {
     public function report(Post $post, Request $request)
     {
+        // Same as likes
         $report = $post->reports()->where('user_id', auth()->id())->first();
 
         $validatedData = $request->validate([
@@ -23,6 +24,7 @@ class ReportController extends Controller
         return back();
     }
     public function destroy(Report $report){
+        //only admins can delete reports
         Gate::authorize('delete', $report);
         $report->delete();
         return redirect(route('admin.dashboard'));
