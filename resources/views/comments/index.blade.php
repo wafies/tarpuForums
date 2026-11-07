@@ -55,7 +55,7 @@
                 </button>
             @endauth
             @auth
-                @if(!$post->reports()->where('user_id', auth()->id())->exists()) //if already reported
+                @if(!$post->reports()->where('user_id', auth()->id())->exists()) <!-- if already reported -->
                 <form action="{{ route('posts.report', $post) }}" method="POST" id="{{ $post->id }}-reportForm">
                     @csrf
                     <button onclick="showForm({{ $post->id }})" type="submit" class="button report" id="{{ ($post->reports()->where('user_id', auth()->id())->exists()) ? 'reported' : ''}}">
@@ -133,7 +133,7 @@
                         @endcan
 
                         @can('delete', $comment)
-                            <form action="{{ route('comments.destroy', $comment) }} "method="post">
+                            <form action="{{ route('comments.destroy', $comment) }}" method="post">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="button button-small button-delete">

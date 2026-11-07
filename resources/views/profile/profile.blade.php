@@ -95,6 +95,5 @@
         <button type="submit">Rediģēt</button>
         </form>
         <a href="{{route('posts.index')}}" class="button">Atpakaļ</a>
-        </form>
     </div>
 @endsection

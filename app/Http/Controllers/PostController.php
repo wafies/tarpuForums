@@ -81,7 +81,7 @@ class PostController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'category' => 'required|in:Dārzniecība,Zveja,Zinātniski,RP,Jebkas',
-            'image' => 'required|image|max:2048',
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         // Save the uploaded image to storage/app/public/posts.

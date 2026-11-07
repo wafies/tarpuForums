@@ -55,15 +55,14 @@ class ProfileController extends Controller
         ]);
 
         $user = Auth::user();
-
-        if ($user->profile_picture) {
-            Storage::disk('public')->delete($user->profile_picture);
-        }
         $imagePath = $request->file('profile_picture')->store('profiles', 'public');
 
         $user->profile_picture = $imagePath;
         $user->save();
 
+        if ($user->profile_picture) {
+            Storage::disk('public')->delete($user->profile_picture);
+        }
         return redirect()->route('profile');
     }
 

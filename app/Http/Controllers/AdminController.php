@@ -12,6 +12,12 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
+        // GATE:
+        // Check the named "view-admin-dashboard" Gate defined in
+        // AppServiceProvider. Only administrators pass this check.
+        Gate::authorize('view-admin-dashboard');
+
+        
         $userCount = User::count();
         $postCount = Post::count();
         $commentCount = Comment::count();
@@ -19,11 +25,6 @@ class AdminController extends Controller
         $latestUser = User::latest()->first();
         $latestComment = Comment::latest()->first();
         $reports = Report::latest()->get();
-
-        // GATE:
-        // Check the named "view-admin-dashboard" Gate defined in
-        // AppServiceProvider. Only administrators pass this check.
-        Gate::authorize('view-admin-dashboard');
 
         return view('admin.dashboard', compact('userCount', 'postCount', 'commentCount', 'latestPost', 'latestUser', 'latestComment', 'reports'));
     }
