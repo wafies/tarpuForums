@@ -35,7 +35,17 @@
             <form method='post' action='{{route('reports.destroy', $report)}}'>
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="button">Dzēst ziņojumu (NEVIS IERAKSTU, EJ PATS TO DARI)</button>
+                <button type="submit" class="button">Noraidīt ziņojumu</button>
+            </form>
+            <form method='post' onsubmit="return confirm('Vai jūs tiešām vēlaties dzēst šo publikāciju? Šī darbība ir neatgriezeniska');" action='{{route('posts.destroy', $report->post)}}'>
+                @csrf
+                @method('DELETE')
+                <button type='submit' class="button">Dzēst publikāciju</button>
+            </form>
+            <form method='post' onsubmit="return confirm('Vai jūs tiešām vēlaties dzēst šo profilu? Šī darbība ir neatgriezeniska');" action='{{route('profile.destroy', $report->post->user)}}'>
+                @csrf
+                @method('DELETE')
+                <button type='submit' class="button">Dzēst publikācijas autoru</button>
             </form>
         </div>
         @endforeach

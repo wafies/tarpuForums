@@ -94,6 +94,12 @@
 
         <button type="submit">Rediģēt</button>
         </form>
+        <form method="post" onsubmit="return confirm('Vai jūs tiešām vēlaties dzēst savu profilu? Šī darbība ir neatgriezeniska');" action="{{route('profile.destroy', $user)}}">
+            @csrf
+            @method('DELETE')
+            <input type='hidden' name="check"> <!-- there probably is a better way but whatever -->
+            <button type="submit" class="button danger">Dzēst profilu</button>
+        </form>
         <a href="{{route('posts.index')}}" class="button">Atpakaļ</a>
     </div>
 @endsection

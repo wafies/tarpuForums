@@ -34,6 +34,14 @@
                             <a href="{{route('comments.index', $post)}}" class="user-post-link">{{$post->title}}</a>
                         @endforeach
                     @endif
+                    @can('delete', $user)
+                    <form method="post" onsubmit="return confirm('Vai jūs tiešām vēlaties dzēst savu profilu? Šī darbība ir neatgriezeniska');" action="{{route('profile.destroy', $user)}}">
+                        @csrf
+                        @method('DELETE')
+                        <input type='hidden' name="check"> <!-- there probably is a better way but whatever -->
+                        <button type="submit" class="button danger">Dzēst profilu</button>
+                    </form>
+                    @endcan
             </div>
         </div>
 @endsection

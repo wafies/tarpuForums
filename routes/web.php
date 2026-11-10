@@ -61,6 +61,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile/update', [ProfileController::class, 'updatePicture'])->name('profile.update');
     Route::put('/profile/updateName', [ProfileController::class, 'updateName'])->name('profile.updateName');
     Route::put('/profile/updateDesc', [ProfileController::class, 'updateDesc'])->name('profile.updateDesc');
+    Route::delete('/profile/{user}', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::post('/posts/{post}/like', [PostController::class, 'toggleLike'])->name('posts.like');
 

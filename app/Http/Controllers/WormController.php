@@ -50,7 +50,9 @@ class WormController extends Controller
             'JP' => 'Japan',
             'ZA' => 'South Africa',
         ];
-
+        $request->validate([
+            'limit' => 'integer|min:1|max:100',
+        ]);
         $species = $request->query('species', 'all');
         $continent = $request->query('continent', 'all');
         $country = $request->query('country', 'all');

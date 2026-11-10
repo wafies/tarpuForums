@@ -367,7 +367,13 @@ textarea {
     background: #cbe4f6;
     text-decoration: none;
 }
-
+.danger{
+    background-color: red;
+    color: white;
+}
+.danger:hover{
+    background-color: darkred;
+}
 .button-secondary {
     border-color: #d7dce1;
     background: #ffffff;

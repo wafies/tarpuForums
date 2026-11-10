@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Gate;
 
 class ProfileController extends Controller
 {
@@ -47,7 +48,38 @@ class ProfileController extends Controller
             'likedPosts' => $likedPosts,
         ]);
     }
+    public function destroy(User $user, Request $request){
+        // AUTHORIZATION:
+        // Check the "delete" ability in UserPolicy before deleting.
+        Gate::authorize('delete', $user);
 
+        // Remove the image file from storage.
+        if ($user->profile_picture) {
+            Storage::disk('public')->delete($user->profile_picture);
+        }
+        $user->posts->each(fn ($post) => Storage::disk('public')->delete($post->image_path));
+        
+        if($request->check){
+            Auth::logout();
+
+            // Invalidate the old session.
+            $request->session()->invalidate();
+
+            // Create a new CSRF token.
+            $request->session()->regenerateToken();
+            // Remove the user from the database.
+            $user->delete();
+        
+            return redirect()
+                ->route('posts.index')
+                ->with('success', 'Jūsu konts tika dzēsts.');
+        }
+        $user->delete();
+        
+        return redirect()
+            ->route('admin.dashboard')
+            ->with('success', 'Konts tika dzēsts.');
+    }
     public function updatePicture(Request $request)
     {
         $request->validate([
@@ -57,12 +89,11 @@ class ProfileController extends Controller
         $user = Auth::user();
         $imagePath = $request->file('profile_picture')->store('profiles', 'public');
 
-        $user->profile_picture = $imagePath;
-        $user->save();
-
         if ($user->profile_picture) {
             Storage::disk('public')->delete($user->profile_picture);
         }
+        $user->profile_picture = $imagePath;
+        $user->save();
         return redirect()->route('profile');
     }
 
