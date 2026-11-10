@@ -525,6 +525,11 @@ textarea {
     gap: 10px;
     justify-content: flex-start;
 }
+.comment-action-container{
+    background-color: #f8f1e6;
+    padding: 3px;
+    border-radius: 3px;
+}
 .comment-author-bar{
     height: 50px;
 }
@@ -561,7 +566,9 @@ textarea {
     height: 49px;
     border: 1px solid rgba(120, 120, 84, 0.389);
 }
-
+.comment-sort{
+    width: 50%;
+}
 .latest-comments{
     display: flex;
     flex-direction: column;
@@ -587,17 +594,6 @@ textarea {
     gap: 8px;
 }
 
-/* Comment sorting dropdown (comments index) */
-
-.comment-sort-form {
-    max-width: 280px;
-    margin: 0 auto 16px;
-    text-align: left;
-}
-
-.comment-sort-form .button {
-    margin-top: 10px;
-}
 
 /* Pagination links */
 

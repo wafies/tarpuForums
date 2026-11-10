@@ -37,6 +37,7 @@
             </div>
             
         </article>
+        <div class="comment-action-container">
         <div class="comment-actions">
             <a href="{{ route('comments.create', $post) }}" class="button commentBtn">
                 Pievienot komentāru
@@ -104,15 +105,16 @@
         <form action="{{ route('comments.index', $post) }}" method="get" class="comment-sort-form">
             <div class="form-group">
                 <label for="sort">Kārtot pēc</label>
-                <select name="sort" id="sort">
-                    <option value="newest" @selected($sort === 'newest')>Jaunākie</option>
-                    <option value="oldest" @selected($sort === 'oldest')>Vecākie</option>
-                    <option value="most_liked" @selected($sort === 'most_liked')>Visvairāk patiktie</option>
-                    <option value="least_liked" @selected($sort === 'least_liked')>Vismazāk patiktie</option>
+                <select name="sort" id="sort" class='comment-sort'>
+                    <option value="newest" @if($sort === 'newest') selected @endif>Jaunākie</option>
+                    <option value="oldest" @if($sort === 'oldest') selected @endif>Vecākie</option>
+                    <option value="most_liked" @if($sort === 'most_liked') selected @endif>Visvairāk patiktie</option>
+                    <option value="least_liked" @if($sort === 'least_liked') selected @endif>Vismazāk patiktie</option>
                 </select>
                 <button type="submit" class="button">Kārtot</button>
             </div>
         </form>
+        </div>
         <div class="comment-grid">
             @foreach ($comments as $comment)
                 <div class="comment">
