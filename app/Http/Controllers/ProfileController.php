@@ -42,12 +42,12 @@ class ProfileController extends Controller
         $query = PostLike::query();
         $query->where('user_id', $user->id);
         
-        $likedPosts = $query->get()->pluck('post'); //pluck returns the post array without the postlike stuff
+        $likedPosts = $query->with('post')->get()->pluck('post'); //pluck returns the post array without the postlike stuff
         
         $query = CommentLike::query();
         $query->where('user_id', $user->id);
         
-        $likedComments = $query->get()->pluck('post');
+        $likedComments = $query->with('comment.post')->get()->pluck('comment');
 
         return view('profile.profile', [
             'user' => $user,
