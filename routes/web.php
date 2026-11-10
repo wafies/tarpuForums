@@ -63,10 +63,28 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile/updateDesc', [ProfileController::class, 'updateDesc'])->name('profile.updateDesc');
     Route::delete('/profile/{user}', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::post('/posts/{post}/like', [PostController::class, 'toggleLike'])->name('posts.like');
+    Route::post('/posts/{post}/like', [PostController::class, 'toggleLike'])
+        ->middleware('throttle:10,1')
+        ->name('posts.like');
 
-    Route::post('/posts/{post}/report', [ReportController::class, 'report'])->name('posts.report');
-    Route::delete('/reports/{report}', [ReportController::class, 'destroy'])->name('reports.destroy');
+    Route::post('/posts/{post}/report', [ReportController::class, 'report'])
+        ->middleware('throttle:10,1')
+        ->name('posts.report');
+        
+    Route::delete('/reports/{report}', [ReportController::class, 'destroy'])
+        ->middleware('throttle:10,1')
+        ->name('reports.destroy');
+
+    Route::post('/comments/{comment}/like', [CommentController::class, 'toggleLike'])
+        ->middleware('throttle:10,1')
+        ->name('comments.like');
+
+    Route::post('/comments/{comment}/report', [CommentController::class, 'report'])
+        ->middleware('throttle:10,1')
+        ->name('comments.report');
+
+    Route::delete('/comment-reports/{report}', [ReportController::class, 'destroyCommentReport'])
+        ->name('comment-reports.destroy');
 
     Route::resource('posts.comments', CommentController::class)
         ->shallow() //shallow automatically makes the /post/{id}/comments, /comments/{id}/edit and the other ones

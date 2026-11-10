@@ -46,6 +46,18 @@
                     @endforeach
                 </ul>
             @endif
+            <h2>Patiktie komentāri:</h2>
+            @if($likedComments->isEmpty())
+                <p>Jums vēl nav patikuši ieraksti.</p>
+            @else
+                <ul>
+                    @foreach($likedComments as $comment)
+                        <li>
+                            <a href="{{ route('comments.index', $comment->post) }}">{{ $comment->content }}</a>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
         </div>
             </div>
         </div>

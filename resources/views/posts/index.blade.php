@@ -72,11 +72,14 @@
                             <a class="comment-author" href="{{route('profile.specific', $comment->user)}}">
                                 {{$comment->user->name}}
                             </a>
-                            <p class="comment-date">
+                            <span class="comment-date">
                                 {{ $comment->created_at->diffForHumans() }}
-                            </p>
+                            </span>
+                            <span class="comment-likes">
+                                🪱 {{$comment->likes->count() }}
+                            </span>
                             </div>
-                            <p class="comment-content">{{$comment->content}}</p>
+                                <p class="comment-content">{{$comment->content}}</p>
                             </div>
                             @endforeach
                         </div>
@@ -99,9 +102,9 @@
                         @endauth
                         @auth
                             @if(!$post->reports()->where('user_id', auth()->id())->exists())
-                            <form action="{{ route('posts.report', $post) }}" method="POST" id="{{ $post->id }}-reportForm">
+                            <form action="{{ route('posts.report', $post) }}" method="POST" id="post-{{ $post->id }}-reportForm">
                                 @csrf
-                                <button onclick="showForm({{ $post->id }})" type="submit" class="button report" id="{{ ($post->reports()->where('user_id', auth()->id())->exists()) ? 'reported' : ''}}">
+                                <button onclick="showReportForm('post-{{ $post->id }}')" type="submit" class="button report" id="{{ ($post->reports()->where('user_id', auth()->id())->exists()) ? 'reported' : ''}}">
                                     🚩
                                 </button>
                             </form>
@@ -163,19 +166,4 @@
             @endif
         </div>
     @endif
-    <script>
-        function showForm(postId) {
-            event.preventDefault();
-            const reason = prompt("Lūdzu, ievadiet iemeslu, kāpēc ziņa ir jāziņo:");
-            if (reason) {
-                const form = document.getElementById(postId + '-reportForm');
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'reason';
-                input.value = reason;
-                form.appendChild(input);
-                form.submit();
-            }
-        }
-        </script>
 @endsection

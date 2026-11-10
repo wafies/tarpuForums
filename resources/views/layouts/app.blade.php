@@ -213,6 +213,22 @@
         document.getElementById('adContainer').addEventListener('click', function() {
             window.location.href = 'https://www.compostcommunity.com.au/uploads/6/8/7/8/68784659/worm-on-white-background-20_orig.png';
         });
+        // Shared report-button helper for posts and comments.
+        // The form ids follow the pattern "{prefix}-{id}-reportForm",
+        // e.g. "post-17-reportForm" or "comment-42-reportForm".
+        function showReportForm(formPrefix) {
+            event.preventDefault();
+            const reason = prompt("Lūdzu, ievadiet iemeslu, kāpēc ziņa ir jāziņo:");
+            if (reason) {
+                const form = document.getElementById(formPrefix + '-reportForm');
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'reason';
+                input.value = reason;
+                form.appendChild(input);
+                form.submit();
+            }
+        }
     </script>
 </body>
 </html>

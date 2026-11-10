@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PostLike;
+use App\Models\CommentLike;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,10 +43,16 @@ class ProfileController extends Controller
         $query->where('user_id', $user->id);
         
         $likedPosts = $query->get()->pluck('post'); //pluck returns the post array without the postlike stuff
+        
+        $query = CommentLike::query();
+        $query->where('user_id', $user->id);
+        
+        $likedComments = $query->get()->pluck('post');
 
         return view('profile.profile', [
             'user' => $user,
             'likedPosts' => $likedPosts,
+            'likedComments' => $likedComments,
         ]);
     }
     public function destroy(User $user, Request $request){

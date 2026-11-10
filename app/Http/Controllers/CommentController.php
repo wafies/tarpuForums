@@ -9,17 +9,79 @@ use Illuminate\Support\Facades\Gate;
 
 class CommentController extends Controller
 {
-    public function index(Post $post)
+    public function index(Request $request, Post $post)
     {
-        $comments = $post->comments()
+        $sort = $request->query('sort', 'newest');
+
+        // withCount/withExists give each comment likes_count,
+        // liked_by_user and reported_by_user without extra queries per comment.
+        $query = $post->comments()
             ->with('user')
-            ->latest()
-            ->paginate(6);
+            ->withCount('likes')
+            ->withExists([
+                'likes as liked_by_user' => fn ($query) => $query->where('user_id', auth()->id()),
+                'reports as reported_by_user' => fn ($query) => $query->where('user_id', auth()->id()),
+            ]);
+
+        // Same sorting pattern as PostController::index, but with likes instead of comments.
+        switch ($sort) {
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 'most_liked':
+                $query->orderBy('likes_count', 'desc');
+                break;
+            case 'least_liked':
+                $query->orderBy('likes_count', 'asc');
+                break;
+            case 'newest':
+            default:
+                $query->latest();
+                break;
+        }
+
+        // withQueryString keeps the sort when clicking pagination links.
+        $comments = $query->paginate(6)->withQueryString();
 
         return view('comments.index', [
             'post' => $post,
             'comments' => $comments,
+            'sort' => $sort,
         ]);
+    }
+
+    // Same as PostController::toggleLike, but for comments.
+    public function toggleLike(Comment $comment)
+    {
+        // Checks if user has already liked this comment.
+        $like = $comment->likes()->where('user_id', auth()->id())->first();
+
+        if ($like) {
+            $like->delete();
+
+            return back();
+        }
+
+        $comment->likes()->create(['user_id' => auth()->id()]);
+
+        return back();
+    }
+
+    // Same as ReportController::report, but for comments.
+    public function report(Comment $comment, Request $request)
+    {
+        $validatedData = $request->validate([
+            'reason' => 'required|string|max:255',
+        ]);
+
+        // firstOrCreate = the check-then-create pattern, but atomic.
+        // The unique constraint on (comment_id, user_id) is the backstop.
+        $comment->reports()->firstOrCreate(
+            ['user_id' => auth()->id()],
+            ['reason' => $validatedData['reason']],
+        );
+
+        return back();
     }
 
     public function create(Post $post)

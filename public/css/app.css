@@ -355,16 +355,15 @@ textarea {
 .button {
     display: inline-block;
     padding: 8px 13px;
-    border: 1px solid #9fc7e6;
+    border: 1px solid #b8a484;
     border-radius: 4px;
-    background: #dceefa;
+    background: #f3ddbb;
     color: #315f82;
     font-size: 14px;
     cursor: pointer;
 }
-
 .button:hover {
-    background: #cbe4f6;
+    background: #d2bb96;
     text-decoration: none;
 }
 .danger{
@@ -449,7 +448,16 @@ textarea {
     border-top: none;
 }
 .commentBtn{
+    display: flex;
     margin-bottom: 20px;
+    align-items: center;
+}
+.comment-likes{
+    margin-left: auto;
+    margin-right: 20px;
+    background: #ebd4ae;
+    border-radius: 3px;
+    padding: 4px;
 }
 .worm-image{
     display: block;
@@ -577,6 +585,18 @@ textarea {
     justify-content: center;
     align-items: center;
     gap: 8px;
+}
+
+/* Comment sorting dropdown (comments index) */
+
+.comment-sort-form {
+    max-width: 280px;
+    margin: 0 auto 16px;
+    text-align: left;
+}
+
+.comment-sort-form .button {
+    margin-top: 10px;
 }
 
 /* Pagination links */

@@ -56,9 +56,9 @@
             @endauth
             @auth
                 @if(!$post->reports()->where('user_id', auth()->id())->exists()) <!-- if already reported -->
-                <form action="{{ route('posts.report', $post) }}" method="POST" id="{{ $post->id }}-reportForm">
+                <form action="{{ route('posts.report', $post) }}" method="POST" id="post-{{ $post->id }}-reportForm">
                     @csrf
-                    <button onclick="showForm({{ $post->id }})" type="submit" class="button report" id="{{ ($post->reports()->where('user_id', auth()->id())->exists()) ? 'reported' : ''}}">
+                    <button onclick="showReportForm('post-{{ $post->id }}')" type="submit" class="button report" id="{{ ($post->reports()->where('user_id', auth()->id())->exists()) ? 'reported' : ''}}">
                         🚩
                     </button>
                 </form>
@@ -101,6 +101,18 @@
             <p class="empty-message">Nav komentāru :(</p>
         </div>
     @else
+        <form action="{{ route('comments.index', $post) }}" method="get" class="comment-sort-form">
+            <div class="form-group">
+                <label for="sort">Kārtot pēc</label>
+                <select name="sort" id="sort">
+                    <option value="newest" @selected($sort === 'newest')>Jaunākie</option>
+                    <option value="oldest" @selected($sort === 'oldest')>Vecākie</option>
+                    <option value="most_liked" @selected($sort === 'most_liked')>Visvairāk patiktie</option>
+                    <option value="least_liked" @selected($sort === 'least_liked')>Vismazāk patiktie</option>
+                </select>
+                <button type="submit" class="button">Kārtot</button>
+            </div>
+        </form>
         <div class="comment-grid">
             @foreach ($comments as $comment)
                 <div class="comment">
@@ -126,8 +138,38 @@
                         <p class="comment-content">{{$comment->content}}</p>
                     </div>
                     <div class="comment-actions">
+                        @auth
+                            <form action="{{ route('comments.like', $comment) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="button like" id="{{ $comment->liked_by_user ? 'liked' : '' }}">
+                                    🪱 {{ $comment->likes_count }}
+                                </button>
+                            </form>
+                        @else
+                            <button disabled type="submit" class="disabled button like">
+                                🪱 {{ $comment->likes_count }}
+                            </button>
+                        @endauth
+                        @auth
+                            @if(!$comment->reported_by_user)
+                            <form action="{{ route('comments.report', $comment) }}" method="POST" id="comment-{{ $comment->id }}-reportForm">
+                                @csrf
+                                <button onclick="showReportForm('comment-{{ $comment->id }}')" type="submit" class="button report">
+                                    🚩
+                                </button>
+                            </form>
+                            @else
+                            <button disabled type="submit" class="disabled button report" id="reported">
+                                🚩
+                            </button>
+                            @endif
+                        @else
+                            <button disabled type="submit" class="disabled button report">
+                                🚩
+                            </button>
+                        @endauth
                         @can('update', $comment)
-                            <a href="{{ route('comments.edit', $comment) }}" class="button button-small">
+                            <a href="{{ route('comments.edit', $comment) }}" class="button commentBtn button-small">
                                 Rediģēt
                             </a>
                         @endcan
@@ -136,7 +178,7 @@
                             <form action="{{ route('comments.destroy', $comment) }}" method="post">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="button button-small button-delete">
+                                <button type="submit" class="button commentBtn button-delete">
                                     Dzēst
                                 </button>
                             </form>
@@ -157,20 +199,5 @@
         </div>
     @endif
         <a href="{{route('posts.index')}}" class="button">Atpakaļ</a>
-    
-    <script>
-        function showForm(postId) {
-            event.preventDefault();
-            const reason = prompt("Lūdzu, ievadiet iemeslu, kāpēc ziņa ir jāziņo:");
-            if (reason) {
-                const form = document.getElementById(postId + '-reportForm');
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'reason';
-                input.value = reason;
-                form.appendChild(input);
-                form.submit();
-            }
-        }
-        </script>
+
 @endsection
