@@ -23,7 +23,7 @@ class WormController extends Controller
             108 => 'Platyhelminthes'
         ];
         $continentOptions = [
-            'all' => 'All continents',
+            'all' => 'Visi kontinenti',
             'EU' => 'Europe',
             'AFRICA' => 'Africa',
             'ASIA' => 'Asia',
@@ -33,7 +33,7 @@ class WormController extends Controller
             'OCEANIA' => 'Oceania'
         ];
         $countryOptions = [
-            'all' => 'All countries',
+            'all' => 'Visas valstis',
             'US' => 'United States',
             'CA' => 'Canada',
             'GB' => 'United Kingdom',
@@ -130,7 +130,7 @@ class WormController extends Controller
                         //combines all the species
                         $allData = array_merge($data['results'], $allData);
                     }
-                    //shuffle because you probably dont want them in an order repeating
+                    //shuffle because you probably dont want them in an order repeating 
                     shuffle($allData);
                     return $allData;
                 }else{
