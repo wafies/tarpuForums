@@ -29,6 +29,13 @@ class PostSeeder extends Seeder
         ]);
         Post::create([
             'user_id' => User::inRandomOrder()->first()?->id,
+            'title' => 'Wormjima, tu to esi izdarijis atkal',
+            'content' => 'Absolūts kino',
+            'category' => 'Jebkas',
+            'image_path' => 'posts/kojima.png',
+        ]);
+        Post::create([
+            'user_id' => User::inRandomOrder()->first()?->id,
             'title' => 'Neliels padoms no zvejnieka zvejniekam',
             'content' => 'Ja jums kādam ir bērni, lai ko jūs dariet, neatstājiet tos vienus ar saviem zvejas tārpiem. Īsumā - man zveja tai dienā nesanāca.',
             'category' => 'Zveja',
